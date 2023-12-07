@@ -21,4 +21,3 @@ const styles = StyleSheet.create({
 
 
 
-/* mongodb+srv://manasseh919:manasseh4313@cluster0.kbo3uam.mongodb.net/ */
