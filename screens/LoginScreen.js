@@ -9,7 +9,7 @@ import {
   Pressable,
   Alert,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Entypo, MaterialIcons, AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
@@ -21,20 +21,40 @@ const LoginScreen = () => {
 
   const navigation = useNavigation();
 
+  useEffect(() => {
+    const checkLoginStatus = async () => {
+      try {
+        const token = await AsyncStorage.getItem("authToken");
+        if (token) {
+          setTimeout(() => {
+            navigation.replace("Home");
+          }, 400);
+        }
+      } catch (error) {
+        console.log("error", error);
+      }
+    };
+
+    checkLoginStatus();
+  }, []);
+
   const handleLogin = () => {
     const user = {
       email: email,
       password: password,
     };
-    axios.post("http://localhost:4000/login", user).then((response) => {
-      console.log(response);
-      const token = response.data.token;
-      AsyncStorage.setItem("authToken", token);
-      navigation.navigate("Home");
-    }).catch((error)=>{
-      Alert.alert("Login error")
-      console.log("error",error)
-    })
+    axios
+      .post("http://localhost:4000/login", user)
+      .then((response) => {
+        console.log(response);
+        const token = response.data.token;
+        AsyncStorage.setItem("authToken", token);
+        navigation.navigate("Home");
+      })
+      .catch((error) => {
+        Alert.alert("Login error");
+        console.log("error", error);
+      });
   };
   return (
     <SafeAreaView
