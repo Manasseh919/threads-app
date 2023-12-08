@@ -5,19 +5,43 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import  jwt_decode from 'jwt-decode'
+import axios from "axios";
+import { UserType } from "../UserContext";
 
 const ActivityScreen = () => {
-  const [selectedButton, setSelectedButton] = useState("people");
-  const [content, setContent] = useState("People Content");
-
-  const handleButtonClick = (buttonName) =>{
-    setSelectedButton(buttonName)
-
-  }
+    const [selectedButton, setSelctedButton] = useState("people");
+    const [content, setContent] = useState("People Content");
+    const [users, setUsers] = useState([]);
+    const { userId, setUserId } = useContext(UserType);
+    const handleButtonClick = (buttonName) => {
+      setSelctedButton(buttonName);
+    };
+    useEffect(() => {
+      const fetchUsers = async () => {
+        const token = await AsyncStorage.getItem("authToken");
+        const decodedToken = jwt_decode(token);
+        const userId = decodedToken.userId;
+        setUserId(userId);
+  
+        axios
+          .get(`http://localhost:4000/user/${userId}`)
+          .then((response) => {
+            setUsers(response.data);
+          }) 
+          .catch((error) => {
+            console.log("error", error);
+          });
+      };
+  
+      fetchUsers();
+    }, []);
+    console.log("users", users);
   return (
     <ScrollView style={{ marginTop: 50 }}>
-      <View style={{padding:10}}>
+      <View style={{ padding: 10 }}>
         <Text style={{ fontSize: 18, fontWeight: "bold" }}>Actvity</Text>
         <View
           style={{
@@ -27,8 +51,8 @@ const ActivityScreen = () => {
             marginTop: 12,
           }}
         >
-           <TouchableOpacity
-        onPress={()=>handleButtonClick('people')}
+          <TouchableOpacity
+            onPress={() => handleButtonClick("people")}
             style={[
               {
                 flex: 1,
@@ -53,8 +77,8 @@ const ActivityScreen = () => {
               People
             </Text>
           </TouchableOpacity>
-           <TouchableOpacity
-         onPress={()=>handleButtonClick('all')}
+          <TouchableOpacity
+            onPress={() => handleButtonClick("all")}
             style={[
               {
                 flex: 1,
@@ -76,11 +100,11 @@ const ActivityScreen = () => {
                   : { color: "black" },
               ]}
             >
-             All
+              All
             </Text>
           </TouchableOpacity>
-           <TouchableOpacity
-         onPress={()=>handleButtonClick('requests')}
+          <TouchableOpacity
+            onPress={() => handleButtonClick("requests")}
             style={[
               {
                 flex: 1,
@@ -91,7 +115,9 @@ const ActivityScreen = () => {
                 borderRadius: 6,
                 borderWidth: 0.7,
               },
-              selectedButton === "requests" ? { backgroundColor: "black" } : null,
+              selectedButton === "requests"
+                ? { backgroundColor: "black" }
+                : null,
             ]}
           >
             <Text
@@ -102,7 +128,7 @@ const ActivityScreen = () => {
                   : { color: "black" },
               ]}
             >
-             Requests
+              Requests
             </Text>
           </TouchableOpacity>
         </View>

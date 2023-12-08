@@ -97,7 +97,7 @@ const LoginScreen = () => {
               placeholderTextColor={"gray"}
               value={email}
               onChangeText={(text) => setEmail(text)}
-              autoCapitalize={false}
+              autoCapitalize='none'
               style={{
                 color: "gray",
                 marginVertical: 10,

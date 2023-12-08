@@ -14,10 +14,13 @@ app.use(bodyParser.json());
 const jwt = require("jsonwebtoken");
 
 mongoose
-  .connect("mongodb+srv://manasseh919:manasseh4313@cluster0.kbo3uam.mongodb.net/", {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect(
+    "mongodb+srv://manasseh919:manasseh4313@cluster0.kbo3uam.mongodb.net/",
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    }
+  )
   .then(() => {
     console.log(`Connected to MongoDB ${mongoose.connection.host}`);
   })
@@ -114,6 +117,7 @@ const generateSecretKey = () => {
 
 const secretKey = generateSecretKey();
 
+/* login endpoint */
 app.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -132,5 +136,23 @@ app.post("/login", async (req, res) => {
     res.status(200).json({ token });
   } catch (error) {
     res.status(500).json({ message: "Login failed" });
+  }
+});
+
+/* endpoint to access all the users except the logged in user */
+app.get("/user/:userId", (req, res) => {
+  try {
+    const loggedInUserId = req.params.userId;
+
+    User.find({ _id: { $ne: loggedInUserId } })
+      .then((users) => {
+        res.status(200).json(users);
+      })
+      .catch((error) => {
+        console.log("Error: ", error);
+        res.status(500).json("errror");
+      });
+  } catch (error) {
+    res.status(500).json({ message: "error getting the users" });
   }
 });
