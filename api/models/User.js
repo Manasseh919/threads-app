@@ -43,5 +43,5 @@ const userSchema = new mongoose.Schema({
   verificationTaken: String,
 });
 
-const User = mongoose.models("User", userSchema);
+const User = mongoose.model("User", userSchema);
 module.exports = User;

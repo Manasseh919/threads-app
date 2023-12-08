@@ -21,3 +21,10 @@ const styles = StyleSheet.create({
 
 
 
+/* onst transporter = nodemailer.createTestAccount({
+  service: "gmail",
+  auth: {
+    user: "manasseh919@gmail.com",
+    pass: "pymscgdvrragzlyr",
+  },
+}); */
