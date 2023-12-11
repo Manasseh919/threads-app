@@ -156,3 +156,19 @@ app.get("/user/:userId", (req, res) => {
     res.status(500).json({ message: "error getting the users" });
   }
 });
+
+//endoint to follow particular user
+app.post("/follow", async (req, res) => {
+  const { currentUserId, selectedUserId } = req.body;
+
+  try {
+    await User.findByIdAndUpdate(selectedUserId, {
+      $push: { followers: currentUserId },
+    });
+
+    res.sendStatus(200);
+  } catch (error) {
+    console.log(error);
+    res.status(500).jsosn({ message: "error following user" });
+  }
+});
