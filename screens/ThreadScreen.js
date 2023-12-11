@@ -29,7 +29,7 @@ const ThreadScreen = () => {
         setContent("");
       })
       .catch((error) => {
-        console.log("error creating post", error);
+        // console.log("error creating post", error);
       });
   };
   return (

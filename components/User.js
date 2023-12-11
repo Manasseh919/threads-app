@@ -21,7 +21,7 @@ const User = ({ item }) => {
         setRequestSent(true);
       }
     } catch (error) {
-      console.log("error message", error);
+    //   console.log("error message", error);
     }
   };
 
@@ -36,7 +36,7 @@ const User = ({ item }) => {
         })
         if(response.ok){
             setRequestSent(false)
-            console.log("unfollowed successfully")
+            // console.log("unfollowed successfully")
         }
     } catch (error) {
         console.log("error",error)

@@ -56,7 +56,7 @@ const HomeScreen = () => {
 
       setPosts(updatedPosts);
     } catch (error) {
-      console.log("Error liking the post", error);
+      // console.log("Error liking the post", error);
     }
   };
 
@@ -70,11 +70,11 @@ const HomeScreen = () => {
       const updatedPosts = posts.map((post) =>
         post._id === updatedPost._id ? updatedPost : post
       );
-      console.log("updated ",updatedPosts)
+      // console.log("updated ",updatedPosts)
     
       setPosts(updatedPosts);
     } catch (error) {
-      console.error("Error unliking post:", error);
+      // console.error("Error unliking post:", error);
     }
   };
   return (
