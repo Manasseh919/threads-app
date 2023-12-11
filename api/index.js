@@ -187,3 +187,26 @@ app.post("/users/unfollow", async (req, res) => {
     res.status(500).json({ message: "Error unfollowing user" });
   }
 });
+
+//endpoint to create a new post
+app.post("/create-post", async (req, res) => {
+  try {
+    const { content, userId } = req.body;
+
+    const newPostData = {
+      user: userId,
+    };
+
+    if (content) {
+      newPostData.content = content;
+    }
+
+    const newPost = new Post(newPostData);
+
+    await newPost.save();
+
+    res.status(200).json({ message: "Post saved successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Post creation failed" });
+  }
+});
