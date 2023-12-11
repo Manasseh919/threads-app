@@ -175,13 +175,15 @@ app.post("/follow", async (req, res) => {
 
 //endpoint to unfllow a user
 app.post("/users/unfollow", async (req, res) => {
-  const { loggedInUserId, targerUserId } = req.body;
+  const { loggedInUserId, targetUserId } = req.body;
 
   try {
-    await User.findByIdAndUpdate(targerUserId, {
+    await User.findByIdAndUpdate(targetUserId, {
       $pull: { followers: loggedInUserId },
     });
+
+    res.status(200).json({ message: "Unfollowed successfully" });
   } catch (error) {
-    res.status(500).json({ message: "Error Unfollowing user" });
+    res.status(500).json({ message: "Error unfollowing user" });
   }
 });
