@@ -10,6 +10,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import jwtDecode from 'jwt-decode'
 import axios from "axios";
 import { UserType } from "../UserContext";
+import User from "../components/User";
 
 const ActivityScreen = () => {
     const [selectedButton, setSelctedButton] = useState("people");
@@ -131,6 +132,15 @@ const ActivityScreen = () => {
               Requests
             </Text>
           </TouchableOpacity>
+        </View>
+        <View >
+          {selectedButton === 'people'  &&(
+            <View style={{marginTop:20}}>
+              {users?.map((item,index)=>(
+                <User key={index} item={item}/>
+              ))}
+            </View>
+          )}
         </View>
       </View>
     </ScrollView>
