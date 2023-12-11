@@ -7,10 +7,18 @@ import {
   TextInput,
   Button,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import { UserType } from "../UserContext";
 
 const ThreadScreen = () => {
   const [content, setContent] = useState("");
+  const { userId, setUserId } = useContext(UserType);
+
+  const handlePostSubmit = () =>{
+    const postData = {
+      userId
+    }
+  }
   return (
     <SafeAreaView style={{ padding: 10 }}>
       <View
@@ -45,7 +53,7 @@ const ThreadScreen = () => {
       </View>
 
       <View style={{marginTop:20}}/>
-      <Button title="Share Post" />
+      <Button  onPress={handlePostSubmit} title="Share Post"  />
 
       
     </SafeAreaView>
