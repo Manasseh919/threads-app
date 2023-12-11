@@ -1,10 +1,11 @@
 import { StyleSheet, Text, View, ScrollView, Image } from "react-native";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import jwtDecode from "jwt-decode";
 import { UserType } from "../UserContext";
 import axios from "axios";
 import { Entypo, MaterialIcons, AntDesign,FontAwesome,Ionicons } from "@expo/vector-icons";
+import { useFocusEffect } from "@react-navigation/native";
 
 
 const HomeScreen = () => {
@@ -26,6 +27,12 @@ const HomeScreen = () => {
     fetchPosts();
   }, []);
 
+  useFocusEffect(
+    useCallback(() => {
+      fetchPosts();
+    }, [])
+  );
+
   const fetchPosts = async () => {
     try {
       const response = await axios.get("http://localhost:4000/get-posts");
@@ -35,6 +42,41 @@ const HomeScreen = () => {
     }
   };
   console.log("post", posts);
+
+  const handleLike = async (postId) => {
+    try {
+      const response = await axios.put(
+        `http://localhost:4000/posts/${postId}/${userId}/like`
+      );
+      const updatedPost = response.data;
+
+      const updatedPosts = posts?.map((post) =>
+        post?._id === updatedPost._id ? updatedPost : post
+      );
+
+      setPosts(updatedPosts);
+    } catch (error) {
+      console.log("Error liking the post", error);
+    }
+  };
+
+  const handleDislike = async (postId) => {
+    try {
+      const response = await axios.put(
+        `http://localhost:4000/posts/${postId}/${userId}/unlike`
+      );
+      const updatedPost = response.data;
+      // Update the posts array with the updated post
+      const updatedPosts = posts.map((post) =>
+        post._id === updatedPost._id ? updatedPost : post
+      );
+      console.log("updated ",updatedPosts)
+    
+      setPosts(updatedPosts);
+    } catch (error) {
+      console.error("Error unliking post:", error);
+    }
+  };
   return (
     <ScrollView style={{ marginTop: 50, flex: 1, backgroundColor: "white" }}>
       <View style={{ alignItems: "center", marginTop: 20 }}>
